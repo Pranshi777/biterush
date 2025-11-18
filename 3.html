@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BiteRush — Quick, affordable, reliable</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FFD700; /* Bright yellow */
+      --primary-contrast: #1A1A1A; /* Dark text for contrast on primary */
+      --green: #2ECC71; /* Fresh green */
+      --blue: #1E90FF;  /* Trustworthy blue */
+      --bg: #FAFAFA;
+      --card-bg: #FFFFFF;
+      --text: #1A1A1A;
+      --muted: #5A5A5A;
+      --border: #EAEAEA;
+      --shadow: 0 4px 16px rgba(0,0,0,0.08);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --focus: #1E90FF;
+      --cta: var(--primary);
+      --cta-text: var(--primary-contrast);
+    }
+
+    /* Reset + base */
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 16px; /* Min 14px requirement satisfied and improved */
+      line-height: 1.5;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:focus { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+    img { max-width: 100%; height: auto; display: block; }
+    button {
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.15s ease, background-color 0.2s ease, color 0.2s ease;
+    }
+    button:focus {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: var(--radius-sm);
+    }
+    input, select {
+      font-family: inherit;
+      font-size: 16px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: #fff;
+      width: 100%;
+    }
+    input:focus, select:focus {
+      outline: 3px solid var(--focus);
+      border-color: var(--blue);
+    }
+
+    /* Typography hierarchy */
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 12px 0;
+    }
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+    }
+    p { margin: 0 0 12px 0; color: var(--muted); }
+
+    /* Layout */
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo {
+      width: 36px; height: 36px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--primary), var(--green));
+      box-shadow: var(--shadow);
+    }
+    .brand-name {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--text);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 10px;
+    }
+    .nav-link.active {
+      background: #FFF7C2; /* subtle yellow tint */
+      color: var(--text);
+      border: 1px solid #FFE27A;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .icon-button {
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+    }
+    .icon-button:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-1px);
+    }
+    .primary-btn {
+      background: var(--cta);
+      color: var(--cta-text);
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-weight: 600;
+      box-shadow: 0 6px 18px rgba(255, 215, 0, 0.35);
+    }
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(255, 215, 0, 0.45);
+    }
+    .secondary-btn {
+      background: var(--blue);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 6px 18px rgba(30, 144, 255, 0.35);
+    }
+    .secondary-btn:hover { transform: translateY(-1px); }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+    .card {
+      grid-column: span 12;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      transition: transform 0.08s ease, box-shadow 0.15s ease;
+    }
+    .card:hover { transform: translateY(-2px); }
+    @media (min-width: 720px) {
+      .card.half { grid-column: span 6; }
+      .card.third { grid-column: span 4; }
+    }
+
+    /* Utility */
+    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .space-between { display: flex; align-items: center; justify-content: space-between; }
+    .muted { color: var(--muted); }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #E9FFF2; color: #137A3A;
+      border: 1px solid #C8F7DA;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-weight: 600;
+    }
+    .blue-badge {
+      background: #EAF5FF; color: #0E4A8A;
+      border-color: #CDE6FF;
+    }
+    .yellow-badge {
+      background: #FFF8D6; color: #5A4A00;
+      border-color: #FFECA6;
+    }
+    .divider { height: 1px; background: var(--border); margin: 10px 0; }
+
+    /* Screen containers */
+    .screen { display: none; animation: fade 200ms ease; }
+    .screen.active { display: block; }
+    @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Forms + tables */
+    .form-row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 720px) { .form-row.two { grid-template-columns: 1fr 1fr; } }
+    label { font-weight: 600; color: var(--text); margin-bottom: 6px; display: inline-block; }
+    .help { font-size: 14px; color: var(--muted); }
+
+    /* Menu items */
+    .menu-item {
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+    .menu-thumb {
+      width: 72px; height: 72px; border-radius: 12px; background: #FFF7C2; border: 1px solid #FFE27A;
+      display: grid; place-items: center; font-weight: 700; color: #5A4A00;
+    }
+    .menu-meta h3 { margin-bottom: 6px; }
+    .price { font-weight: 700; color: var(--text); }
+    .qty { display: inline-flex; align-items: center; gap: 10px; }
+    .qty button {
+      background: #fff; border: 1px solid var(--border); width: 32px; height: 32px; border-radius: 8px; font-weight: 700;
+    }
+
+    /* Table-like list */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .table th, .table td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .table tr:hover td { background: #FCFCFC; }
+
+    /* Notifications toggles */
+    .toggle {
+      position: relative; width: 52px; height: 28px; background: #ddd; border-radius: 999px; transition: background 0.2s;
+    }
+    .toggle input { position: absolute; opacity: 0; width: 52px; height: 28px; cursor: pointer; }
+    .toggle span {
+      position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; background: #fff; border-radius: 999px; box-shadow: var(--shadow); transition: left 0.2s, background 0.2s;
+    }
+    .toggle input:checked ~ span { left: 27px; background: var(--green); }
+    .toggle input:checked ~ .toggle-track { background: #CFF5DA; }
+
+    /* CTA alignment rule: primary CTA right aligned */
+    .cta-row { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+
+    /* Accessibility helpers */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <!-- Global Header -->
+    <header aria-label="App header">
+      <div class="header-inner">
+        <div class="brand" role="banner">
+          <div class="brand-logo" aria-hidden="true"></div>
+          <div class="brand-name">BiteRush</div>
+          <span class="badge yellow-badge" aria-label="Peer approved service">Peer-approved</span>
+        </div>
+        <nav aria-label="Primary">
+          <button class="nav-link" id="nav-dashboard" data-nav="dashboard" aria-controls="dashboard" aria-label="Go to Dashboard">Dashboard</button>
+          <button class="nav-link" id="nav-menu" data-nav="menu" aria-controls="menu" aria-label="Go to Menu & Ordering">Ordering</button>
+          <button class="nav-link" id="nav-settings" data-nav="settings" aria-controls="settings" aria-label="Go to Settings and Profile">Settings</button>
+        </nav>
+        <div class="header-actions">
+          <button class="icon-button" id="nav-notifications" data-nav="notifications" aria-label="Manage notifications">
+            <!-- bell icon -->
+            <span aria-hidden="true">🔔</span>
+            <span>Notifications</span>
+          </button>
+          <button class="icon-button" id="nav-history" data-nav="history" aria-label="View order history and tracking">
+            <span aria-hidden="true">📦</span>
+            <span>History</span>
+          </button>
+          <button class="icon-button" id="nav-profile" data-nav="settings" aria-label="Open settings">
+            <span aria-hidden="true">⚙️</span>
+            <span>Settings</span>
+          </button>
+          <button class="secondary-btn" id="logout-btn" aria-label="Sign out">Sign out</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- 1. Login / Signup Screen -->
+      <section id="login" class="screen active" aria-labelledby="login-title">
+        <div class="grid">
+          <div class="card">
+            <h1 id="login-title">Welcome back, Aakash</h1>
+            <p>Quick, affordable, and reliable meals delivered on your campus schedule. Friendly vibes, on-time bites.</p>
+            <div class="divider"></div>
+
+            <div class="form-row two" role="form">
+              <div>
+                <label for="login-email">Email</label>
+                <input id="login-email" type="email" placeholder="aakash@college.edu" aria-describedby="login-email-help" />
+                <div id="login-email-help" class="help">Use your college email for campus deals.</div>
+              </div>
+              <div>
+                <label for="login-pass">Password</label>
+                <input id="login-pass" type="password" placeholder="••••••••" />
+              </div>
+            </div>
+
+            <div class="cta-row">
+              <button class="icon-button" id="google-auth" aria-label="Continue with Google">
+                <span aria-hidden="true">🟢</span>
+                <span>Continue with Google</span>
+              </button>
+              <button class="primary-btn" id="login-cta" aria-label="Login to BiteRush">Login</button>
+            </div>
+
+            <p class="help">New here? <a href="#" id="signup-link" aria-label="Open signup">Create an account</a></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Dashboard Screen -->
+      <section id="dashboard" class="screen" aria-labelledby="dashboard-title">
+        <h1 id="dashboard-title">Dashboard</h1>
+        <p>Fetching tasty options — hang tight!</p>
+        <div class="grid" style="margin-top: 12px;">
+          <div class="card third">
+            <h2>Recommended meals</h2>
+            <p class="muted">Curated for busy days. Balanced, budget-friendly.</p>
+            <div class="divider"></div>
+            <div class="row">
+              <span class="badge">3 Deals Today</span>
+              <span class="badge blue-badge">Trending</span>
+            </div>
+            <ul style="margin-top: 10px; padding-left: 18px;">
+              <li>Masala Maggi Bowl — ₹79</li>
+              <li>Paneer Roll — ₹99</li>
+              <li>Veg Thali Mini — ₹129</li>
+            </ul>
+            <div class="cta-row">
+              <button class="primary-btn" id="order-now-btn" aria-label="Order now">Order Now</button>
+            </div>
+          </div>
+
+          <div class="card third">
+            <h2>Campus deals</h2>
+            <p class="muted">Exclusive hostel & canteen partner offers.</p>
+            <div class="divider"></div>
+            <ul style="margin-top: 10px; padding-left: 18px;">
+              <li>Free delivery on orders over ₹149</li>
+              <li>₹20 off late-night orders (10pm–1am)</li>
+              <li>Combo: Chole Bhature + Lassi ₹149</li>
+            </ul>
+            <div class="cta-row">
+              <button class="secondary-btn" id="see-deals-btn" aria-label="View deals">View Deals</button>
+            </div>
+          </div>
+
+          <div class="card third">
+            <h2>Quick actions</h2>
+            <p class="muted">Stay in control in two taps.</p>
+            <div class="divider"></div>
+            <div class="row">
+              <button class="icon-button" id="qa-history" aria-label="Open order history">Order History</button>
+              <button class="icon-button" id="qa-notifs" aria-label="Open notifications">Notifications</button>
+              <button class="icon-button" id="qa-settings" aria-label="Open settings">Settings</button>
+            </div>
+            <div class="cta-row">
+              <button class="primary-btn" id="dashboard-primary-cta" aria-label="Order now from Dashboard">Order Now</button>
+            </div>
+          </div>
+
+          <div class="card half">
+            <h2>Status</h2>
+            <p class="muted">Snapshot of what’s happening right now.</p>
+            <div class="divider"></div>
+            <div class="row">
+              <div class="badge blue-badge" aria-label="Orders in progress badge">2 Orders in Progress</div>
+              <div class="badge" aria-label="Delivery speed badge">On-time average: 22 min</div>
+            </div>
+            <p style="margin-top: 10px;">No active orders yet. Let’s get you started!</p>
+          </div>
+          <div class="card half">
+            <h2>Saved preferences</h2>
+            <p class="muted">We remember what you like.</p>
+            <div class="divider"></div>
+            <p>Veg preference: Strict</p>
+            <p>Spice level: Medium</p>
+            <p>Budget range: ₹80–₹150</p>
+            <div class="cta-row">
+              <button class="primary-btn" data-nav="settings" aria-label="Edit preferences">Edit Preferences</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Menu / Ordering Screen -->
+      <section id="menu" class="screen" aria-labelledby="menu-title">
+        <div class="space-between">
+          <h1 id="menu-title">Menu & Ordering</h1>
+          <button class="icon-button" id="back-from-menu" aria-label="Back to Dashboard">Back</button>
+        </div>
+        <p class="muted">Curated lists to minimize choice overload. Build your cart fast.</p>
+        <div class="grid" style="margin-top: 12px;">
+          <div class="card half">
+            <h2>Filters</h2>
+            <div class="divider"></div>
+            <div class="form-row two">
+              <div>
+                <label for="filter-type">Meal Type</label>
+                <select id="filter-type" aria-label="Select meal type">
+                  <option value="all">All</option>
+                  <option value="breakfast">Breakfast</option>
+                  <option value="lunch">Lunch</option>
+                  <option value="snacks">Snacks</option>
+                  <option value="dinner">Dinner</option>
+                </select>
+              </div>
+              <div>
+                <label for="filter-budget">Budget (₹)</label>
+                <select id="filter-budget" aria-label="Select budget">
+                  <option value="any">Any</option>
+                  <option value="low">Under ₹100</option>
+                  <option value="mid">₹100–₹150</option>
+                  <option value="high">₹150+</option>
+                </select>
+              </div>
+              <div>
+                <label for="filter-spice">Spice level</label>
+                <select id="filter-spice" aria-label="Select spice level">
+                  <option value="mild">Mild</option>
+                  <option value="medium">Medium</option>
+                  <option value="hot">Hot</option>
+                </select>
+              </div>
+              <div>
+                <label for="filter-veg">Veg only</label>
+                <select id="filter-veg" aria-label="Veg only">
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+            </div>
+            <div class="cta-row">
+              <button class="secondary-btn" id="apply-filters" aria-label="Apply filters">Apply</button>
+            </div>
+          </div>
+
+          <div class="card half">
+            <h2>Cart summary</h2>
+            <div class="divider"></div>
+            <p id="cart-items" aria-live="polite">Items: 0</p>
+            <p id="cart-total" aria-live="polite">Total: ₹0</p>
+            <div class="cta-row">
+              <button class="primary-btn" id="checkout-btn" aria-label="Order Now">Order Now</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Curated for you</h2>
+            <div class="divider"></div>
+
+            <div class="menu-item" data-id="1">
+              <div class="menu-thumb" aria-label="Masala Maggi Bowl image placeholder">🍜</div>
+              <div class="menu-meta">
+                <h3>Masala Maggi Bowl</h3>
+                <p class="muted">Comfort snack, ready in ~10 min</p>
+                <div class="row">
+                  <span class="price">₹79</span>
+                  <span class="badge">Fast delivery</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="qty" aria-label="Quantity controls">
+                  <button aria-label="Decrease quantity" class="qty-dec">−</button>
+                  <span class="qty-count">0</span>
+                  <button aria-label="Increase quantity" class="qty-inc">+</button>
+                </div>
+                <button class="primary-btn add-to-cart" aria-label="Add to cart">Add to Cart</button>
+              </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="menu-item" data-id="2">
+              <div class="menu-thumb" aria-label="Paneer Roll image placeholder">🌯</div>
+              <div class="menu-meta">
+                <h3>Paneer Roll</h3>
+                <p class="muted">Protein-packed wrap, ~15 min</p>
+                <div class="row">
+                  <span class="price">₹99</span>
+                  <span class="badge blue-badge">Popular</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="qty" aria-label="Quantity controls">
+                  <button aria-label="Decrease quantity" class="qty-dec">−</button>
+                  <span class="qty-count">0</span>
+                  <button aria-label="Increase quantity" class="qty-inc">+</button>
+                </div>
+                <button class="primary-btn add-to-cart" aria-label="Add to cart">Add to Cart</button>
+              </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="menu-item" data-id="3">
+              <div class="menu-thumb" aria-label="Veg Thali Mini image placeholder">🍱</div>
+              <div class="menu-meta">
+                <h3>Veg Thali Mini</h3>
+                <p class="muted">Balanced mini-meal, ~20 min</p>
+                <div class="row">
+                  <span class="price">₹129</span>
+                  <span class="badge">Budget combo</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="qty" aria-label="Quantity controls">
+                  <button aria-label="Decrease quantity" class="qty-dec">−</button>
+                  <span class="qty-count">0</span>
+                  <button aria-label="Increase quantity" class="qty-inc">+</button>
+                </div>
+                <button class="primary-btn add-to-cart" aria-label="Add to cart">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Detail / Transaction View -->
+      <section id="history" class="screen" aria-labelledby="history-title">
+        <div class="space-between">
+          <h1 id="history-title">Order history & live tracking</h1>
+          <button class="icon-button" id="back-from-history" aria-label="Back to Dashboard">Back</button>
+        </div>
+        <p class="muted">A dependable timeline that respects your schedule.</p>
+        <div class="grid" style="margin-top: 12px;">
+          <div class="card">
+            <h2>Past orders</h2>
+            <div class="divider"></div>
+            <table class="table" aria-label="Order history table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Items</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="history-list">
+                <tr>
+                  <td>#BR-1029</td>
+                  <td>Paneer Roll x1, Masala Maggi x1</td>
+                  <td>₹178</td>
+                  <td><span class="badge">Delivered</span></td>
+                  <td><button class="icon-button reorder-btn" aria-label="Reorder">Reorder</button></td>
+                </tr>
+                <tr>
+                  <td>#BR-1030</td>
+                  <td>Veg Thali Mini x1</td>
+                  <td>₹129</td>
+                  <td><span class="badge blue-badge">In transit</span></td>
+                  <td><button class="icon-button track-btn" aria-label="Track delivery">Track</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <h2>Live tracking</h2>
+            <div class="divider"></div>
+            <p id="tracking-status" aria-live="polite">Rider picked up your order. ETA ~12 min.</p>
+            <div class="cta-row">
+              <button class="primary-btn" id="refresh-tracking" aria-label="Refresh tracking">Refresh</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Notification / Reminder Setup -->
+      <section id="notifications" class="screen" aria-labelledby="notifications-title">
+        <div class="space-between">
+          <h1 id="notifications-title">Notifications & reminders</h1>
+          <button class="icon-button" id="back-from-notifs" aria-label="Back to Dashboard">Back</button>
+        </div>
+        <p class="muted">Friendly alerts that keep you on time, never overwhelmed.</p>
+        <div class="grid" style="margin-top: 12px;">
+          <div class="card half">
+            <h2>Order status alerts</h2>
+            <div class="divider"></div>
+            <div class="row" style="align-items:center;">
+              <div class="toggle" role="switch" aria-label="Toggle order alerts">
+                <input id="toggle-order-alerts" type="checkbox" />
+                <div class="toggle-track"></div>
+                <span aria-hidden="true"></span>
+              </div>
+              <label for="toggle-order-alerts">Enable live order updates</label>
+            </div>
+            <div style="margin-top: 12px;">
+              <label for="alert-frequency">Alert frequency</label>
+              <select id="alert-frequency" aria-label="Select alert frequency">
+                <option value="smart">Smart (recommended)</option>
+                <option value="low">Low</option>
+                <option value="high">High</option>
+              </select>
+              <p class="help">Smart sends key milestones only.</p>
+            </div>
+            <div class="cta-row">
+              <button class="primary-btn" id="save-notifs" aria-label="Save notification settings">Save Settings</button>
+            </div>
+          </div>
+
+          <div class="card half">
+            <h2>Deals & promos</h2>
+            <div class="divider"></div>
+            <div class="row" style="align-items:center;">
+              <div class="toggle" role="switch" aria-label="Toggle deal alerts">
+                <input id="toggle-deal-alerts" type="checkbox" />
+                <div class="toggle-track"></div>
+                <span aria-hidden="true"></span>
+              </div>
+              <label for="toggle-deal-alerts">Show campus deals</label>
+            </div>
+            <div style="margin-top: 12px;">
+              <label for="deal-time">Preferred time</label>
+              <select id="deal-time" aria-label="Preferred deal time">
+                <option value="morning">Morning</option>
+                <option value="noon">Noon</option>
+                <option value="evening">Evening</option>
+                <option value="late">Late night</option>
+              </select>
+            </div>
+            <div class="cta-row">
+              <button class="primary-btn" id="save-deals" aria-label="Save deals settings">Save Settings</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Confirmation Screen -->
+      <section id="confirmation" class="screen" aria-labelledby="confirmation-title">
+        <div class="space-between">
+          <h1 id="confirmation-title">Confirmation</h1>
+          <button class="icon-button" id="back-from-confirm" aria-label="Back to Dashboard">Back</button>
+        </div>
+        <div class="grid" style="margin-top: 12px;">
+          <div class="card">
+            <h2 id="confirm-message">You’re all set! Enjoy your meal.</h2>
+            <p class="muted" id="confirm-details">Order #BR-1031 will arrive in ~20 min. We’ve sent a friendly update.</p>
+            <div class="cta-row">
+              <button class="primary-btn" id="return-dashboard" aria-label="Return to Dashboard">Return to Dashboard</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Settings / Profile -->
+      <section id="settings" class="screen" aria-labelledby="settings-title">
+        <div class="space-between">
+          <h1 id="settings-title">Settings & profile</h1>
+          <button class="icon-button" id="back-from-settings" aria-label="Back to Dashboard">Back</button>
+        </div>
+        <p class="muted">Make BiteRush feel like it’s built just for you.</p>
+        <div class="grid" style="margin-top: 12px;">
+          <div class="card half">
+            <h2>Profile</h2>
+            <div class="divider"></div>
+            <div class="form-row">
+              <div>
+                <label for="profile-name">Full name</label>
+                <input id="profile-name" type="text" value="Aakash" />
+              </div>
+              <div>
+                <label for="profile-hostel">Hostel / Block</label>
+                <input id="profile-hostel" type="text" placeholder="Hostel B, Block 3" />
+              </div>
+              <div>
+                <label for="profile-phone">Phone</label>
+                <input id="profile-phone" type="tel" placeholder="+91 98xxxxxxxx" />
+              </div>
+            </div>
+            <div class="cta-row">
+              <button class="primary-btn" id="save-profile" aria-label="Save profile">Save Settings</button>
+            </div>
+          </div>
+
+          <div class="card half">
+            <h2>Payment methods</h2>
+            <div class="divider"></div>
+            <div class="form-row">
+              <div>
+                <label for="payment-default">Default payment</label>
+                <select id="payment-default">
+                  <option>UPI (PhonePe)</option>
+                  <option>UPI (GPay)</option>
+                  <option>Debit Card</option>
+                  <option>Cash on Delivery</option>
+                </select>
+              </div>
+              <div>
+                <label for="promo-code">Promo code</label>
+                <input id="promo-code" type="text" placeholder="Apply code" />
+              </div>
+            </div>
+            <div class="cta-row">
+              <button class="primary-btn" id="save-payment" aria-label="Save payment settings">Save Settings</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // SPA navigation and micro-interactions
+    const screens = ['login','dashboard','menu','history','notifications','confirmation','settings'];
+    const state = {
+      loggedIn: false,
+      cart: { items: [], total: 0 },
+    };
+
+    function show(screen) {
+      screens.forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.toggle('active', id === screen);
+      });
+      // Update nav active state
+      document.querySelectorAll('[data-nav]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.nav === screen);
+      });
+      // Auto-return from confirmation after short delay to reinforce flow
+      if (screen === 'confirmation') {
+        setTimeout(() => show('dashboard'), 1800);
+      }
+      // Focus management: set heading focusable
+      const heading = document.querySelector(`#${screen} h1`);
+      if (heading) {
+        heading.setAttribute('tabindex','-1');
+        heading.focus({ preventScroll: true });
+      }
+    }
+
+    // Header links
+    document.getElementById('nav-dashboard').addEventListener('click', () => show('dashboard'));
+    document.getElementById('nav-menu').addEventListener('click', () => show('menu'));
+    document.getElementById('nav-settings').addEventListener('click', () => show('settings'));
+    document.getElementById('nav-notifications').addEventListener('click', () => show('notifications'));
+    document.getElementById('nav-history').addEventListener('click', () => show('history'));
+    document.getElementById('nav-profile').addEventListener('click', () => show('settings'));
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      state.loggedIn = false;
+      show('login');
+    });
+
+    // Login screen actions
+    document.getElementById('login-cta').addEventListener('click', () => {
+      state.loggedIn = true;
+      show('dashboard');
+    });
+    document.getElementById('google-auth').addEventListener('click', () => {
+      state.loggedIn = true;
+      show('dashboard');
+    });
+    document.getElementById('signup-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('Signup flow placeholder — friendly and quick.');
+    });
+
+    // Dashboard quick actions
+    const goMenu = () => show('menu');
+    document.getElementById('order-now-btn').addEventListener('click', goMenu);
+    document.getElementById('dashboard-primary-cta').addEventListener('click', goMenu);
+    document.getElementById('qa-history').addEventListener('click', () => show('history'));
+    document.getElementById('qa-notifs').addEventListener('click', () => show('notifications'));
+    document.querySelector('[data-nav="settings"]').addEventListener('click', () => show('settings'));
+    document.getElementById('see-deals-btn').addEventListener('click', () => alert('Deals modal placeholder.'));
+
+    // Back buttons
+    document.getElementById('back-from-menu').addEventListener('click', () => show('dashboard'));
+    document.getElementById('back-from-history').addEventListener('click', () => show('dashboard'));
+    document.getElementById('back-from-notifs').addEventListener('click', () => show('dashboard'));
+    document.getElementById('back-from-confirm').addEventListener('click', () => show('dashboard'));
+    document.getElementById('back-from-settings').addEventListener('click', () => show('dashboard'));
+    document.getElementById('return-dashboard').addEventListener('click', () => show('dashboard'));
+
+    // Menu interactions
+    const priceMap = { 1: 79, 2: 99, 3: 129 };
+    function updateCartSummary() {
+      const itemsCount = state.cart.items.reduce((sum, i) => sum + i.qty, 0);
+      const total = state.cart.items.reduce((sum, i) => sum + (priceMap[i.id] * i.qty), 0);
+      state.cart.total = total;
+      document.getElementById('cart-items').textContent = `Items: ${itemsCount}`;
+      document.getElementById('cart-total').textContent = `Total: ₹${total}`;
+    }
+    function setQty(el, count) {
+      el.closest('.menu-item').querySelector('.qty-count').textContent = count;
+    }
+    document.querySelectorAll('.menu-item').forEach(item => {
+      const id = Number(item.dataset.id);
+      const qtyCountEl = item.querySelector('.qty-count');
+      let qtyLocal = 0;
+      item.querySelector('.qty-inc').addEventListener('click', () => {
+        qtyLocal++;
+        setQty(item, qtyLocal);
+      });
+      item.querySelector('.qty-dec').addEventListener('click', () => {
+        qtyLocal = Math.max(0, qtyLocal - 1);
+        setQty(item, qtyLocal);
+      });
+      item.querySelector('.add-to-cart').addEventListener('click', () => {
+        if (qtyLocal === 0) qtyLocal = 1; // default add 1
+        const existing = state.cart.items.find(i => i.id === id);
+        if (existing) existing.qty += qtyLocal; else state.cart.items.push({ id, qty: qtyLocal });
+        updateCartSummary();
+        // Micro-interaction: brief confirmation
+        item.classList.add('added');
+        setTimeout(() => item.classList.remove('added'), 300);
+      });
+    });
+
+    document.getElementById('apply-filters').addEventListener('click', () => {
+      alert('Filters applied — supportive, friendly, and human.');
+    });
+
+    document.getElementById('checkout-btn').addEventListener('click', () => {
+      if (state.cart.items.length === 0) {
+        alert('Your cart is empty — let’s add something tasty!');
+        return;
+      }
+      document.getElementById('confirm-message').textContent = 'You’re all set! Enjoy your meal.';
+      document.getElementById('confirm-details').textContent = 'Order #BR-1031 will arrive in ~20 min. We’ve sent a friendly update.';
+      show('confirmation');
+    });
+
+    // History interactions
+    document.getElementById('refresh-tracking').addEventListener('click', () => {
+      const phrases = [
+        'Rider near your hostel gate — ETA ~8 min.',
+        'Crossing the main quad — ETA ~6 min.',
+        'Approaching your block — ETA ~3 min.'
+      ];
+      const msg = phrases[Math.floor(Math.random() * phrases.length)];
+      document.getElementById('tracking-status').textContent = msg;
+    });
+    document.querySelectorAll('.reorder-btn').forEach(btn => btn.addEventListener('click', () => {
+      state.cart.items = [{ id: 2, qty: 1 }, { id: 1, qty: 1 }];
+      updateCartSummary();
+      document.getElementById('confirm-message').textContent = 'Reorder placed — quick and easy.';
+      document.getElementById('confirm-details').textContent = 'Order #BR-1032 will arrive in ~18 min.';
+      show('confirmation');
+    }));
+    document.querySelectorAll('.track-btn').forEach(btn => btn.addEventListener('click', () => {
+      show('history');
+      document.getElementById('tracking-status').textContent = 'Your order is in transit — ETA ~12 min.';
+    }));
+
+    // Notifications save
+    document.getElementById('save-notifs').addEventListener('click', () => {
+      document.getElementById('confirm-message').textContent = 'Notification settings saved.';
+      document.getElementById('confirm-details').textContent = 'We’ll keep alerts helpful and timely.';
+      show('confirmation');
+    });
+    document.getElementById('save-deals').addEventListener('click', () => {
+      document.getElementById('confirm-message').textContent = 'Deals preferences saved.';
+      document.getElementById('confirm-details').textContent = 'Expect relevant campus promos only.';
+      show('confirmation');
+    });
+
+    // Settings save
+    document.getElementById('save-profile').addEventListener('click', () => {
+      document.getElementById('confirm-message').textContent = 'Profile updated successfully.';
+      document.getElementById('confirm-details').textContent = 'Your preferences help us curate smarter menus.';
+      show('confirmation');
+    });
+    document.getElementById('save-payment').addEventListener('click', () => {
+      document.getElementById('confirm-message').textContent = 'Payment settings saved.';
+      document.getElementById('confirm-details').textContent = 'You’re all set for faster checkout.';
+      show('confirmation');
+    });
+
+    // Initial focus management and keyboard-friendly nav
+    window.addEventListener('load', () => {
+      document.getElementById('login-email').focus();
+    });
+    document.addEventListener('keydown', (e) => {
+      // Simple keyboard shortcuts for faster flow
+      if (e.altKey && e.key.toLowerCase() === 'd') show('dashboard');
+      if (e.altKey && e.key.toLowerCase() === 'o') show('menu');
+      if (e.altKey && e.key.toLowerCase() === 's') show('settings');
+      if (e.altKey && e.key.toLowerCase() === 'n') show('notifications');
+      if (e.altKey && e.key.toLowerCase() === 'h') show('history');
+    });
+  </script>
+</body>
+</html>
